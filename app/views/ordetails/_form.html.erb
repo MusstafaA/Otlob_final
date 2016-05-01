@@ -1,0 +1,96 @@
+<% if @finish_message %>
+    <h1 class="alert alert-success"><%= @finish_message %></h1>
+<% else %>
+    <div class="row">
+    <table class='col-md-8 col-lg-8 col-sm-4 col-xs-12 table table-hover table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>Item</th>
+          <th>Amount</th>
+          <th>Price</th>
+          <th>Comment</th>
+          
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if @ordered_list %>
+          <%  @ordered_list.each do |order| %>
+             <% if order.item %>
+                <tr>
+                  <td><%=  order.user_name %></td>
+                  <td><%=  order.item %></td>
+                  <td><%=  order.amount %></td>
+                  <td><%=  order.price %> LE</td>
+                  <td><%=  order.comment %></td>
+                  <td><%=  link_to 'Cancel',order, method: :delete,:class => 'btn btn-danger' %></td>                  
+                  
+                </tr>
+                <% end %>
+          <% end %>
+
+      </tbody>
+    </table>
+    <br>
+
+    <div class="flickr_pagination">
+        <div class="page_info">
+          <%= page_entries_info @ordered_list %>
+        </div>
+        <%= will_paginate @ordered_list, :container => false %>
+      </div>
+
+    </div>
+     <% end %>
+
+
+    <% if @cancel_message %>
+          <h1 class="alert alert-success"><%= @cancel_message %></h1>
+    <% else %>
+          <h1>Add New Order</h1>
+
+          <% if params[:notice] %>
+              <% params[:notice].each do |key, value| %>
+                <div class="alert alert-danger"><%= key %> <%= value %></div>
+              <% end %>
+          <% end %>
+
+
+          <div class="row">
+          <%= form_for(@ordetail ,:html => {:class => "form-inline"} ) do |f| %>
+
+          <div class="field form-group">
+            <%= f.label :item %><br>
+            <%= f.text_field :item ,autofocus: true ,:class=>'form-control'%>
+          </div>
+          <div class="field form-group">
+            <%= f.label :price %><br>
+            <%= f.number_field :price , autofocus: true ,:class=>'form-control', :step => 'any' ,min: 0 %>
+          </div>
+          <div class="field form-group">
+            <%= f.label :amount %><br>
+            <%= f.number_field :amount ,autofocus: true ,:class=>'form-control',min: 0 %>
+          </div>
+          <div class="field form-group">
+            <%= f.label :comment %><br>
+            <%= f.text_area :comment,autofocus: true ,:class=>'form-control' %>
+          </div>
+          <div class="field form-group hide">
+            <%= f.label :user_id %><br>
+            <%= f.number_field :user_id ,autofocus: true ,:class=>'form-control'%>
+          </div>
+          <div class="field form-group hide">
+            <%= f.label :order_id %><br>
+            <%= f.number_field :order_id, :value => params[:order_id] , autofocus: true ,:class=>'form-control' %>
+          </div>
+          <div class="actions form-group">
+            <%= f.submit "Add" ,:class => 'btn btn-primary' %>
+          </div>
+          <% end %>
+          <div>
+
+    <% end %>        
+
+<% end %>    

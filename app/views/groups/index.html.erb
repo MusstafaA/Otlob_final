@@ -1,0 +1,24 @@
+
+<p id="notice"><%= notice %></p>
+
+ 
+  <%= render 'form' %> 
+
+<h2 style="color:#ccc;">Listing Groups</h2>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+    <% @groups.each do |group| %>
+      <div class="MT">
+        <span style="color:rgb(64, 137, 90); font-size:"><%= group.name %> </span>
+        <%= link_to "Edit", edit_group_path(group),:class => "btn btn-success", :method => :get %>
+        <%= link_to "Display", group,:class => "btn btn-success", :method => :get %> 
+                      
+        <%= link_to "Delete", group,:class => "btn btn-success", :method => :delete , data: { confirm: 'Are you sure?' } %>
+      </div>
+    <% end %>
+  </div>
+           
+ 
+</div>
+
+

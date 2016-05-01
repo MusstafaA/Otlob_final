@@ -1,0 +1,84 @@
+I"h
+(function() {
+  var Notifications;
+
+  Notifications = (function() {
+    function Notifications() {
+      this.notifications = $("[data-behavior='notifications']");
+      if (this.notifications.length > 0) {
+        this.setup();
+      }
+    }
+
+    Notifications.prototype.setup = function() {
+      var self, worker;
+      self = this;
+      $("#top").delegate("[data-behavior='notifications-link']", "click", this.handleClick);
+      $("#top").delegate(".joinBtn", "click", this.joinClick);
+      return (worker = function() {
+        return $.ajax({
+          url: "/notifications.json",
+          dataType: "JSON",
+          method: "GET",
+          success: self.handleSuccess,
+          complete: function() {
+            return setTimeout(worker, 20000);
+          }
+        });
+      })();
+    };
+
+    Notifications.prototype.joinClick = function(e) {
+      var or_id, us_id;
+      or_id = $(this).attr("orderId");
+      us_id = $(this).attr("userId");
+      return $.ajax({
+        url: "/ordetails/join",
+        dataType: "JSON",
+        data: {
+          order_id: or_id,
+          user_id: us_id
+        },
+        method: "POST",
+        success: function() {
+          return $("[orderId='or_id']").attr('disabled', true);
+        }
+      });
+    };
+
+    Notifications.prototype.handleClick = function(e) {
+      return $.ajax({
+        url: "/notifications/mark_as_read",
+        dataType: "JSON",
+        method: "POST",
+        success: function() {
+          $("[data-behavior='unread-count']").text(0);
+          return $("[id='rounded']").css("background", "#36424a");
+        }
+      });
+    };
+
+    Notifications.prototype.handleSuccess = function(data) {
+      var items;
+      console.log(data);
+      items = $.map(data, function(notification) {
+        return "<li><span style='display:inline-block;' >" + notification.actor + "  " + notification.action + " you for </span><a style='display:inline-block;'  href='" + notification.url + "'> " + notification.notifiable["for"] + " order</a><button style='display:inline-block;' class='btn btn-success joinBtn' orderId='" + notification.notifiable.id + "' userId='" + notification.recipient.id + "'>Join</button></li>";
+      });
+      if (items.length !== 0) {
+        $("[id='rounded']").css("background", "red");
+      }
+      $("[data-behavior='unread-count']").text(items.length);
+      $("[data-behavior='notification-items']").html(items);
+      return $("[data-behavior='notification-items']").append("<li><a href='/notifications'>See All Notifications</a></li>");
+    };
+
+    return Notifications;
+
+  })();
+
+  jQuery(function() {
+    return new Notifications;
+  });
+
+}).call(this);
+:ET

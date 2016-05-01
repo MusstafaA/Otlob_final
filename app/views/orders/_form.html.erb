@@ -1,0 +1,157 @@
+<div class=' col-md-6 col-lg-6 col-sm-6 col-xs-6'>
+<%= form_for(@order) do |f| %>
+<div class='row'>
+ 
+  <% if @order.errors.any? %>
+    <div id="error_explanation" class='alert alert-danger'>
+      <h3 class='text-danger'><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h3>
+
+      
+      <% @order.errors.full_messages.each do |message| %>
+        <p class='text-danger' >
+       <% if message == 'Res name can\'t be blank' %>
+        
+        <%= " Resturant name can't be blank " %>
+
+        <% else %>
+
+          
+        <%= " Restaurant name can only have letters and numbers only one space between words " %>
+
+        <% end %>
+        </p>
+      <% end %>
+      
+    </div>
+  <% end %>
+ 
+ <h2 style='color: #8A8888'>Add order</h2>
+</div>
+
+<div class='row'>
+<div id="one" class='col-md-4 col-lg-4 col-sm-12 col-xs-12'>
+
+   <fieldset>
+    <legend style='color: #8A8888'>Order details </legend>
+
+  <div class="field">
+    <%= f.label :for %><br>
+     <%= f.select :for, ['breakfast','dinner'], :id =>'for',:selected => 'breakfast'  ,:class => 'form-control' %>
+  </div>
+ 
+  <div class="field">
+    <%= f.label :restaurant_name %><br>
+    <%= f.text_field :res_name , :class => 'form-control',:style =>'color:#1c94c4;width:200px'  %>
+  </div>
+
+   <div class="field">
+    <%= f.label :menu_image %>
+    <%= f.file_field :avatar, :accept => 'image/*',:style =>'color:#1c94c4;width:200px; margin-bottom:30px;'%>
+    </div>
+ 
+</fieldset>
+</div>
+<div class='col-md-4 col-lg-4 col-sm-1 col-xs-1'></div>
+<div  id="two" class='col-md-4 col-lg-4 col-sm-12 col-xs-12'>
+  <fieldset>
+    <legend style='color: #8A8888'>Invite your friends</legend>
+  <div class="field">
+         <% @t=@t.as_json %>
+
+    <%= f.label :Invite_friends %><br>
+                <select name='infriends[]' id='friends' multiple="true" style="width:300px;"  class='form-contol col-md-12 col-lg-12 col-sm-12 col-xs-12 friendSelect'> 
+
+            <%  @t.each  do |friend| %>
+                     
+                     <% @name=friend[0]['name']  %> 
+                     <% @image=friend[0]['avatar'] %> 
+
+                     <% @user= User.where(:id => friend[0]['id']) %>
+
+                 <option  image="<%= @user[0].avatar %>" value="<%=@user[0].id%>" class="multSelktrImg" >
+                               
+                                 <%= @name %>   
+                                  
+                   </option>
+                  
+
+        
+             <% end %>
+        </select>
+       
+       
+   </div>
+
+   <div class="field">
+         
+    <%= f.label :Invite_groups %><br>
+         
+        <select   name='ingroups[]'id='groups'  multiple="true" style="width:300px"  class='form-contol col-md-12 col-lg-12 col-sm-12 col-xs-12 groupSelect' > 
+            <%  @groups.each  do |g| %>
+               
+                      <% @g=Group.find(g['id']) %> 
+                   <% @invitedgroupfriends =@g.usgroups %>
+                    
+
+                  <% if @invitedgroupfriends.length != 0 %> 
+
+
+                     <optgroup  label="<%= g["name"] %>">  
+
+                     
+
+                  <% @invitedgroupfriends.each do |friend|  %>
+
+                          <% @user= User.where(:id => friend.user_id) %>
+                                
+                          <option image="<%=@user[0].avatar%>" value="<%=@user[0].id%>" class="multSelktrImg" >
+                               
+                                 <%=@user[0].name %>   
+                                  
+                          </option>
+
+                  <% end %>
+
+                  <% end %>
+              </optgroup>
+
+              <% end %>
+         </select>
+
+         
+      
+   </div>
+   
+         
+     
+
+   
+   <%= f.hidden_field :user_id,{value:current_user.id} %>
+</fieldset>
+</div>
+</div>
+
+
+<div class='row'> 
+   <br>
+      <br>
+         <br>
+  <div class="actions">
+    <%= f.submit  :class => 'form-control btn-primary' , :style=> 'width:130px' %>
+  </div>
+
+  
+
+<% end %>
+</div>
+
+<div class='row'>
+<br>
+         <br>
+<%= link_to 'Back' ,orders_path  %>
+</div>
+</div>
+
+
+
+

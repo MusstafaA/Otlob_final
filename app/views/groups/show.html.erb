@@ -1,0 +1,71 @@
+<p id="notice"><%= notice %></p>
+
+ 
+  <%= render 'form' %> 
+
+<h2 style="color:#ccc;">Listing Groups</h2>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="col-md-5 col-lg-5 col-sm-5 col-xs-5">
+    <% @groups.each do |group| %>
+      <div class="MT">
+        <span style="color:rgb(64, 137, 90); font-size:"><%= group.name %> </span>
+
+        <%= link_to "Edit", edit_group_path(group),:class => "btn btn-success", :method => :get %>
+        <%= link_to "Display", group,:class => "btn btn-success", :method => :get %> 
+                      
+        <%= link_to "Delete", group,:class => "btn btn-success", :method => :delete , data: { confirm: 'Are you sure?' } %>
+        
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-7 col-lg-7 col-sm-7 col-xs-7">
+
+    <fieldset class="scroll col-sm-12">
+      
+      <legend><%= @group_current.name %></legend>
+
+      <%= form_for @usgroup, :url => url_for(:controller => 'usgroups', :action => 'create') do |f| %>
+        <% if @usgroup.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@usgroup.errors.count, "error") %> prohibited this usgroup from being saved:</h2>
+
+            <ul>
+            <% @usgroup.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-inline">
+          <div class="field">
+            <label>User</label>
+            <%= f.text_field :user_id , :list=>"user" , :required => true , :class=>"form-control"%>
+            <datalist id="user">
+              <% @friendships.each do |u| %>
+                <option value="<%= u.friend.name %>"><%= u.friend.name %></option>
+              <% end %>
+            </datalist>
+
+            <%= f.hidden_field :group_id , :value=>params[:id]%>
+            <%= f.submit :value=>"Add" , :class=>"btn btn-default"%>
+          </div>
+        </div>
+      <% end %>
+
+      <% @group_users.each do |usgroup| %>
+        <div class="col-sm-4 MT">
+          <img class="col-sm-5" src="<%= usgroup.user.avatar%>">
+          <div class="col-sm-6">
+            <span class="col-sm-12"><%= usgroup.user.name %></span>
+            <span class="col-sm-12"><%= link_to 'Destroy', usgroup, method: :delete, data: { confirm: 'Are you sure?' }%></span>
+          </div>
+        </div>
+
+      <% end %>  
+    </fieldset>
+
+
+  </div>
+</div>
+

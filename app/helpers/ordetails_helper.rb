@@ -1,0 +1,2 @@
+module OrdetailsHelper
+end

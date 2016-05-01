@@ -1,0 +1,174 @@
+
+
+<div class='modal fade' id='inviteds'>
+      <div class='modal-dialog'>
+        <div class='modal-content'>
+          <div class='modal-heading'>
+            <div class='modal-title'>
+              <h4 class='text-primary'>Invited Friends</h4>
+            </div>
+          </div>
+          <div class='modal-body'>
+            
+           
+             <% @invitedall.each do |friend| %>
+
+             <div style='float:left ; margin-right:20px; padding-top:20px '>
+         
+                <img width='70px' src=<%=friend[0].avatar%> /><br><br>
+              <%=friend[0].name%> <br><br>
+       
+
+             </div>
+           
+             <% end %>
+
+
+          </div>
+          <div class='clearfix'></div>
+          <div class='modal-footer'>
+            <button type="button" class="btn btn-default"     data-dismiss="modal">Ok</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='modal fade' id='joined'>
+      <div class='modal-dialog'>
+        <div class='modal-content'>
+          <div class='modal-heading'>
+            <div class='modal-title'>
+              <h2 class='text-primary'>Joined Friends</h2>
+            </div>
+          </div>
+          <div class='modal-body'>
+             <% @joinedall.each do |friend| %>
+             <div style='float:left ; margin-right:20px; padding-top:20px '>
+         
+                 <img width='70px' src=<%=friend[0].avatar%> /><br><br>
+                    <%=friend[0].name%> <br><br>
+     
+
+
+             </div>
+        <% end %>
+
+
+
+          </div>
+          <div class='clearfix'></div>
+          <div class='modal-footer'>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="row" style="margin-left:20px;margin-right:10px;">
+  <h2 style='color:#5B5757' >Order Details</h2>
+<p id="notice"><%= notice %></p>
+
+<div class='row' >
+
+
+<table style='color:#428bca; margin-left:20px;margin-right:10px;'class=' table table-hover table-striped table-bordered'>
+  <thead>
+    <tr style='color:#5B5757'>
+      <th>menu</th>
+      <th>Order</th>
+      <th>Resturant name</th>
+      <th>Status</th>
+      <th>Created by</th>
+      <th>Invited</th>
+      <th>Joined</th>
+    </tr>
+  </thead>
+
+  <tr>
+        <td><img class="img-rounded" alt="no image" width="50" height="50" src="<%= @order.avatar %>" /> </td>
+        <td><%=  @order.for %></td>
+        <td><%=  @order.res_name %></td>
+        <td><%=  @order.status %></td>
+        <td><%=  @user[0].name %></td>
+        <td>
+    <button class='btn btn-success' data-toggle='modal' data-target='#inviteds'> <%= @order.inviteds.length.to_s %> Invited</button></td>
+     <td>
+    <button class='btn btn-success' data-toggle='modal' data-target='#joined'> <%= @t.length.to_s %> Joined </button></td>
+    </tr>   
+</table>
+<div>
+<div>
+
+
+</div>
+</div>
+
+<div class="row" style="margin-left:20px;margin-right:10px;">
+  <h2 id="foo" >Requested Orders List </h2>
+  <input id="current_order" type="hidden" value="<%= params[:id] %>"/>
+<table data-behavior="ordetails" class='table table-hover table-striped table-bordered'>
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Item</th>
+      <th>Amount</th>
+      <th>Price</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+
+
+  <tbody  data-behavior='order-items'>
+
+  </tbody>
+</table>
+<br>
+
+<div class="flickr_pagination">
+    <div class="page_info">
+      <%= page_entries_info @ordered_list %>
+    </div>
+    <%= will_paginate @ordered_list, :container => false %>
+  </div>
+
+</div>
+
+<script>
+
+var worker;
+(worker = function() {
+  return $.ajax({
+    url: "/orders/<%= params[:id] %>.json",
+    dataType: "JSON",
+    method: "GET",
+    success: handleSuccess,
+    complete: function() {
+      return setTimeout(worker, 1000);
+    }
+  });
+})();
+
+function handleSuccess(data) {
+        console.log(data);
+        items = $.map(data, function(order) {
+
+          if (order.item ){
+          return "<tr><td>" + order.person + "</td><td>" + order.item + " </td><td>" + order.amount + "</td><td>" + order.price + " LE</td><td>" + order.comment + "</td></tr>";
+          }
+        });
+
+        $("[data-behavior='order-items']").html(items);
+
+    };
+
+
+</script>
+
+
+
+
+<div><%=link_to 'Add Item To Order ', '/orders/'+params[:id]+'/ordetails/new' , :class => 'btn btn-primary' ,:style => 'margin-bottom:20px' %></div>
+
+
+<%= link_to 'Back', orders_path %>
+
+

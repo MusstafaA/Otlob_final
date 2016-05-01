@@ -1,0 +1,66 @@
+<h2 style='color:#5B5757' >Edit your account </h2>
+
+<div class='col-md-8 col-lg-8 col-sm-4 col-xs-12'>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+   <% if devise_error_messages! != "" %>
+     
+            <div class='row alert alert-danger fade in ' > 
+                   
+                      
+                       <%= devise_error_messages! %>
+                 
+            </div>
+     
+
+      <% end %>
+   
+
+
+  
+   <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true ,class:'form-control'%>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true ,class:'form-control'%>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %> <i style='color:#428bca;' >(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "off" ,class:'form-control'%>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" ,class:'form-control'%>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i style='color:#428bca;' >(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "off" ,class:'form-control' %>
+  </div>
+  
+   <div class="field">
+    <%= f.label :uploadfile %>
+    <%= f.file_field :avatar,  :accept => 'image/*',class:'form-control' %>
+    </div>
+
+
+
+  <div class="actions" style='margin-top: 20px'>
+    <%= f.submit "Update" ,class:'form-control',:style => 'width:90px' %>
+  </div>
+<% end %>
+<br><br><br>
+<%= link_to "Back", :back %>
+</div>
+
+
+

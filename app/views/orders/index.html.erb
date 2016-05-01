@@ -1,0 +1,90 @@
+<p id="notice"><%= notice %></p>
+
+<h1 style='color:#5B5757'>Listing Orders</h1>
+<div class='row' style='margin-bottom: 20px;margin-left:20px;margin-right:10px;' >
+<%= link_to 'New Order', new_order_path ,:class =>'btn btn-default' %>
+<%= link_to 'Joined Orders', '/orders/joined/all', :class =>'btn btn-default' %>
+
+</div> 
+<div class='row' >
+
+<table style='color:#428bca; margin-left:20px;margin-right:10px;'class='table table-hover table-striped table-bordered'>
+  <thead>
+    <tr style='color:#5B5757'>
+      <th>menu</th>
+      <th>Order</th>
+      <th>Resturant name</th>
+      <th>Status</th>
+      <th>Invited</th>
+      <th>Joined</th>
+      <th colspan="3">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%  @orders.each do |order| %>
+      <tr>
+        <td><img class="img-rounded" alt="no image" width="50" height="50" src="<%= order.avatar %>" /> </td>
+        <td><%=  order.for %></td>
+        <td><%=  order.res_name %></td>
+        <td><%=  order.status %></td>
+        <td><%=  order.inviteds.length %></td>
+        <%  @i=0; @t=[]; %>
+        
+     <% @joined=order.ordetails %>
+   
+     <% if    @joined.length != 0 %>
+
+    <% @joined.each  do |joined| %>
+              <% if joined.user_id != order.user_id  %>
+
+         <%  @temp=User.where(:id => joined.user_id) %>
+           
+              <% if @i == 0 %>
+                    <%  @t[@i]=@temp %>
+           
+                      <% @i=@i+1 %>
+          
+              <% else %>
+
+            <% if @t.include? @temp == false %> 
+
+           
+           <%  @t[@i]=@temp %>
+            
+           <%  @i=@i+1 %>
+          
+          <% end %>
+
+        <% end %>
+     <%  end %>  
+ <%  end %>   
+  
+<% end %>
+    <td><%= @t.length %></td>
+         <% if order.status == 'waiting'%>
+        <td ><%= link_to 'Show', order ,:class => 'btn btn-default'%></td>
+
+        <td><%=  link_to 'Finish', edit_order_path(order), :class => 'btn btn-default' %></td>
+        <td><%=  link_to 'Cancel',order, method: :delete ,:class => 'btn btn-default' %></td>
+      </tr>
+       <% else %>
+         
+          <td colspan='3'><%=  link_to 'Show', order ,:class => 'btn btn-default'%></td>
+          
+          
+             </tr>
+          <% end %>  
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+<div class="flickr_pagination">
+    <div class="page_info">
+      <%= page_entries_info @orders %>
+    </div>
+    <%= will_paginate @orders, :container => false %>
+  </div>
+
+

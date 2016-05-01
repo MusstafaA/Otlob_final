@@ -1,0 +1,37 @@
+<h1>Listing Notifications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Notifications</th>
+      
+    </tr>
+  </thead>
+
+  <tbody data-behavior="notification-list">
+
+    <% if @all_notfications %>
+      <% @all_notfications.each do |notification| %>
+
+         <% if notification.notifiable %>
+
+          <tr class="<% if(notification.action == 'created')%> hide <% end %>">
+            <td><%= notification.actor.name %> <%= notification.action %> you for <%= link_to notification.notifiable.for ,order_path(notification.notifiable.id) %> <button style='display:inline-block;' class='btn btn-success join <% if(notification.action == 'joined' || notification.action == 'created')%> hide <% end %>' orderId='<%= notification.notifiable.id %>' ownerId='<%= notification.actor_id %>' userId='<%= notification.recipient_id %>'>Join</button></td>
+          </tr>
+
+        <% end %>
+      <% end %>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div class="flickr_pagination">
+    <div class="page_info">
+      <%= page_entries_info @all_notfications %>
+    </div>
+    <%= will_paginate @all_notfications, :container => false %>
+  </div>
+
+

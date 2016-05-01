@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Item:</strong>
+  <%= @ordetail.item %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @ordetail.price %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @ordetail.amount %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @ordetail.comment %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @ordetail.user_id %>
+</p>
+
+<p>
+  <strong>Group:</strong>
+  <%= @ordetail.order_id %>
+</p>
+
+<%= link_to 'Edit', edit_ordetail_path(@ordetail) %> |
+<%= link_to 'Back', ordetails_path %>

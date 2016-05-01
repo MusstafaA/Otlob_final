@@ -1,0 +1,50 @@
+I"ù(function() {
+  var Ordetails;
+
+  Ordetails = (function() {
+    function Ordetails() {
+      this.order_details = $("[data-behavior='ordetails']");
+      if (this.order_details.length > 0) {
+        this.setup();
+      }
+      this.notificationList = $("[data-behavior='notification-list']");
+      if (this.notificationList.length > 0) {
+        this.listen();
+      }
+    }
+
+    Ordetails.prototype.setup = function() {
+      var self, worker;
+      self = this;
+      return (worker = function() {
+        return $.ajax({
+          url: "/orders/75.json",
+          dataType: "JSON",
+          method: "GET",
+          success: self.handleSuccess,
+          complete: function() {
+            return setTimeout(worker, 10000);
+          }
+        });
+      })();
+    };
+
+    Ordetails.prototype.handleSuccess = function(data) {
+      var items;
+      console.log(data);
+      items = $.map(data, function(order) {
+        return "<tr><td>" + order.person + "</td><td>" + order.item + " </td><td>" + order.amount + "</td><td>" + order.price + " LE</td><td>" + order.comment + "</td></tr>";
+      });
+      return $("[data-behavior='order-items']").html(items);
+    };
+
+    return Ordetails;
+
+  })();
+
+  jQuery(function() {
+    return new Ordetails;
+  });
+
+}).call(this);
+:ET

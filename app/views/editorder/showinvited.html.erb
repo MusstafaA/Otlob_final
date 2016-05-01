@@ -1,0 +1,21 @@
+<h1>show invited friends</h1>
+
+<% @t.each do |friend| %>
+   <div style='float:left ; margin-right:20px'>
+         
+         <img width='70px' src=<%=friend[0].avatar%> /><br><br>
+              <%=friend[0].name%> <br><br>
+       
+
+   </div>
+
+<% end %>
+
+
+<br>
+
+<div class ='clearfix'>
+  
+  <%= link_to 'Back' , @order ,:class => 'clearfix' %>
+
+</div>
